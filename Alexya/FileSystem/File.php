@@ -27,6 +27,16 @@ namespace Alexya\FileSystem;
  */
 class File
 {
+    ///////////////////////////////
+    // Start Constant Definition //
+    ///////////////////////////////
+    const MAKE_FILE_EXISTS_THROW_EXCEPTION = 1;
+    const MAKE_FILE_EXISTS_OVERWRITE       = 2;
+    const MAKE_FILE_EXISTS_OPEN            = 3;
+    /////////////////////////////
+    // End Constant Definition //
+    /////////////////////////////
+
     /////////////////////////////////////////
     // Start Static Methods and Properties //
     /////////////////////////////////////////
@@ -59,14 +69,16 @@ class File
      * @throws \Alexya\FileSystem\Exceptions\FileAlreadyExists If $path already exists as a file.
      * @throws \Alexya\FileSystem\Exceptions\CouldntCreateFile If the file can't be created.
      */
-    public static function make(string $path) : File
+    public static function make(string $path, int $ifExists = File::MAKE_FILE_EXISTS_THROW_EXCEPTION) : File
     {
         $exists = File::exists($path);
 
-        if($ifExists == File::MAKE_FILE_EXISTS_THROW_EXCEPTION) {
+        if($ifExists == File::MAKE_FILE_EXISTS_OVERWRITE) {
+            unlink($path);
+        } else if($ifExsists == File::MAKE_FILE_EXISTS_OPEN) {
+            return new File($path);
+        } else {
             throw new FileAlreadyExists($path);
-        } else if($ifExists == File::MAKE_FILE_EXISTS_OVERWRITE) {
-
         }
 
         if(!fopen($path, "c")) {
@@ -317,6 +329,9 @@ class File
         return $lines;
     }
 
+    ///////////////////////////////
+    // Start Getters and Setters //
+    ///////////////////////////////
     /**
      * Moves the file to the specified location.
      *
@@ -439,4 +454,7 @@ class File
     {
         return $this->getLocation().DIRECTORY_SEPARATOR.$this->baseName();
     }
+    /////////////////////////////
+    // End Getters and Setters //
+    /////////////////////////////
 }
