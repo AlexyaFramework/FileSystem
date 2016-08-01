@@ -181,5 +181,240 @@ class File
         $this->_extension = File::getExtension($path);
     }
 
-    // TODO: add is(Writable|Readable|Executable), write, append, getLine, getAllLines, move, delete,
+    /**
+     * Checks wether the file has write permission or not.
+     *
+     * @return bool True if fie is writable, false if not.
+     */
+    public function isWritable() : bool
+    {
+        return is_writable($this->_path);
+    }
+
+    /**
+     * Checks wether the file has read permission or not.
+     *
+     * @return bool True if fie is readable, false if not.
+     */
+    public function isReadable() : bool
+    {
+        return is_readable($this->_path);
+    }
+
+    /**
+     * Checks wether the file has execution permission or not.
+     *
+     * @return bool True if fie is executable, false if not.
+     */
+    public function isExecutable() : bool
+    {
+        return is_executable($this->_path);
+    }
+
+    /**
+     * Writes a string to the file.
+     *
+     * @param string $str String to write.
+     */
+    public function write(string $str)
+    {
+        $handler = fopen($this->_path, "w");
+        fwrite($handler, $str);
+        fclose($handler);
+    }
+
+    /**
+     * Appends a string to the file.
+     *
+     * @param string $str String to append.
+     */
+    public function append(string $str)
+    {
+        $handler = fopen($this->_path, "a");
+        fwrite($handler, $str);
+        fclose($handler);
+    }
+
+    /**
+     * Returns file's contents.
+     *
+     * @return string File's contents.
+     */
+    public function getContent() : string
+    {
+        return file_get_contents($this->_path);
+    }
+
+    /**
+     * Returns a string of specified length from file.
+     *
+     * @param int $length Length to read.
+     * @param int $offset Length to skip before reading.
+     *
+     * @return string String from file of given length.
+     */
+    public function read(int $length = 1, int $offset = 0) : string
+    {
+        return substr($this->getContent(), $offset, $length);
+    }
+
+    /**
+     * Returns a string with the lines between $start and $end
+     *
+     * @param int $start Start line.
+     * @param int $end   End line.
+     *
+     * @return string String with lines between $start and $end.
+     */
+    public function readBetween(int $start, int $end) : string
+    {
+        return implode("\n", $this->readLinesBetween($start, $end));
+    }
+
+    /**
+     * Returns a single line from file.
+     *
+     * @param int $line Line number.
+     *
+     * @return string Line as string.
+     *
+     * @throws \Alexya\FileSystem\Exceptions\LineNumberAboveFileLines If the line number is bigger than the total number of lines
+     */
+    public function readLine(int $line = 1) : string
+    {
+        $lines = file($this->_path);
+
+        if($line > count($lines)) {
+            throw new LineNumberAboveFileLines($this->_path, $line, count($lines));
+        }
+
+        if($line <= 0) {
+            $line = 1;
+        }
+
+        return $lines[($line - 1)];
+    }
+
+    /**
+     * Returns an array containing the lines between $start and $end.
+     *
+     * @param int $start Start line.
+     * @param int $end   End line.
+     *
+     * @return array Array with lines between $start and $end.
+     */
+    public function readLinesBetween(int $start, int $end) : array
+    {
+        $content = file($this->_path);
+        $lines   = [];
+
+        for($i = $start; $i < $end; $i++) {
+            if(isset($content[$i])) {
+                $lines[] = $content[$i];
+            }
+        }
+
+        return $lines;
+    }
+
+    /**
+     * Moves the file to the specified location.
+     *
+     * @param string $location New file location.
+     */
+    public function setLocation(string $location)
+    {
+        $dir = Directory::make($location, Directory::MAKE_DIRECTORY_EXISTS_OPEN);
+
+        $old = $this->_location.DIRECTORY_SEPARATOR.$this->_name.".".$this->_extension;
+        $new = $dir->getPath().DIRECTORY_SEPARATOR.$this->_name.".".$this->_extension;
+
+        if(rename($old, $new)) {
+            $this->_location = $dir->getPath();
+        }
+    }
+
+    /**
+     * Renames the file
+     *
+     * @param string $name New file name.
+     */
+    public function setName(string $name)
+    {
+        $old = $this->_location.DIRECTORY_SEPARATOR.$this->_name.".".$this->_extension;
+        $new = $this->_location.DIRECTORY_SEPARATOR.$name.".".$this->_extension;
+
+        if(rename($old, $new)) {
+            $this->_name = $name;
+        }
+    }
+
+    /**
+     * Renames file extension.
+     *
+     * @param string $extension New file extension.
+     */
+    public function setExtension(string $extension)
+    {
+        $old = $this->_location.DIRECTORY_SEPARATOR.$this->_name.".".$this->_extension;
+        $new = $this->_location.DIRECTORY_SEPARATOR.$this->_name.".".$extension;
+
+        if(rename($old, $new)) {
+            $this->_extension = $extension;
+        }
+    }
+
+    /**
+     * Sets new file location, name and extension.
+     *
+     * @param string $path New path to file (location + name + extension).
+     */
+    public function setPath(string $path)
+    {
+        $info = pathinfo($path);
+
+        $this->setLocation($info["dirname"]);
+        $this->setName($info["filename"]);
+        $this->setExtension($info["extension"]);
+    }
+
+    /**
+     * Returns file location.
+     *
+     * @return string File's location.
+     */
+    public function getLocation() : string
+    {
+        return $this->_location;
+    }
+
+    /**
+     * Returns file name.
+     *
+     * @return string File's name.
+     */
+    public function getName() : string
+    {
+        return $this->_name;
+    }
+
+    /**
+     * Returns file extension.
+     *
+     * @return string File's extension.
+     */
+    public function getExtension() : string
+    {
+        return $this->_extension;
+    }
+
+    /**
+     * Returns file path.
+     *
+     * @return string File's path.
+     */
+    public function getPath() : string
+    {
+        return $this->getLocation().DIRECTORY_SEPARATOR.$this->getName().".".$this->getExtension();
+    }
 }
