@@ -361,7 +361,11 @@ class File
     public function setExtension(string $extension)
     {
         $old = $this->getLocation().DIRECTORY_SEPARATOR.$this->getBasename();
-        $new = $this->getLocation().DIRECTORY_SEPARATOR.$this->_name.".".$extension;
+        $new = $this->getLocation().DIRECTORY_SEPARATOR.$this->getName();
+
+        if(!empty($extension)) {
+            $new .= ".{$extension}";
+        }
 
         if(rename($old, $new)) {
             $this->_extension = $extension;
