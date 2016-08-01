@@ -85,7 +85,7 @@ class File
      */
     public static function getExtension(string $path) : string
     {
-        return pathinfo($path, PATHINFO_EXTENSION);
+        return (pathinfo($path)["extension"] ?? "");
     }
 
     /**
@@ -97,7 +97,7 @@ class File
      */
     public static function getName(string $path) : string
     {
-        return pathinfo($path, PATHINFO_FILENAME);
+        return (pathinfo($path)["filename"] ?? "");
     }
 
     /**
@@ -109,7 +109,7 @@ class File
      */
     public static function getBasename(string $path) : string
     {
-        return pathinfo($path, PATHINFO_BASENAME);
+        return (pathinfo($path)["basename"] ?? "");
     }
 
     /**
@@ -121,7 +121,7 @@ class File
      */
     public static function getLocation(string $path) : string
     {
-        return pathinfo($path, PATHINFO_DIRNAME);
+        return (pathinfo($path)["dirname"] ?? "");
     }
     ///////////////////////////////////////
     // End Static Methods and Properties //
@@ -326,8 +326,8 @@ class File
     {
         $dir = Directory::make($location, Directory::MAKE_DIRECTORY_EXISTS_OPEN);
 
-        $old = $this->_location.DIRECTORY_SEPARATOR.$this->_name.".".$this->_extension;
-        $new = $dir->getPath().DIRECTORY_SEPARATOR.$this->_name.".".$this->_extension;
+        $old = $this->getLocation().DIRECTORY_SEPARATOR.$this->getBasename();
+        $new = $dir->getPath().DIRECTORY_SEPARATOR.$this->getBasename();
 
         if(rename($old, $new)) {
             $this->_location = $dir->getPath();
@@ -341,8 +341,12 @@ class File
      */
     public function setName(string $name)
     {
-        $old = $this->_location.DIRECTORY_SEPARATOR.$this->_name.".".$this->_extension;
-        $new = $this->_location.DIRECTORY_SEPARATOR.$name.".".$this->_extension;
+        $old = $this->getLocation().DIRECTORY_SEPARATOR.$this->getBasename();
+        $new = $this->getLocation().DIRECTORY_SEPARATOR.$name;
+
+        if(!empty($this->getExtension())) {
+            $new .= ".".$this->getExtension();
+        }
 
         if(rename($old, $new)) {
             $this->_name = $name;
@@ -356,8 +360,8 @@ class File
      */
     public function setExtension(string $extension)
     {
-        $old = $this->_location.DIRECTORY_SEPARATOR.$this->_name.".".$this->_extension;
-        $new = $this->_location.DIRECTORY_SEPARATOR.$this->_name.".".$extension;
+        $old = $this->getLocation().DIRECTORY_SEPARATOR.$this->getBasename();
+        $new = $this->getLocation().DIRECTORY_SEPARATOR.$this->_name.".".$extension;
 
         if(rename($old, $new)) {
             $this->_extension = $extension;
@@ -373,9 +377,9 @@ class File
     {
         $info = pathinfo($path);
 
-        $this->setLocation($info["dirname"]);
-        $this->setName($info["filename"]);
-        $this->setExtension($info["extension"]);
+        $this->setLocation($info["dirname"] ?? "");
+        $this->setName($info["filename"] ?? "");
+        $this->setExtension($info["extension"] ?? "");
     }
 
     /**
@@ -409,12 +413,26 @@ class File
     }
 
     /**
+     * Returns file's base name (name + extension)
+     *
+     * @return string File's basename
+     */
+    public function getBasename() : string
+    {
+        $basename = $this->getName();
+
+        if(!empty($this->getExtension())) {
+            $basename .= ".".$this->getExtension();
+        }
+    }
+
+    /**
      * Returns file path.
      *
      * @return string File's path.
      */
     public function getPath() : string
     {
-        return $this->getLocation().DIRECTORY_SEPARATOR.$this->getName().".".$this->getExtension();
+        return $this->getLocation().DIRECTORY_SEPARATOR.$this->baseName();
     }
 }
