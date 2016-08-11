@@ -341,7 +341,7 @@ class File
     {
         $dir = Directory::make($location, Directory::MAKE_DIRECTORY_EXISTS_OPEN);
 
-        $old = $this->getLocation().DIRECTORY_SEPARATOR.$this->getBasename();
+        $old = $this->getPath();
         $new = $dir->getPath().DIRECTORY_SEPARATOR.$this->getBasename();
 
         if(rename($old, $new)) {
@@ -356,7 +356,7 @@ class File
      */
     public function setName(string $name)
     {
-        $old = $this->getLocation().DIRECTORY_SEPARATOR.$this->getBasename();
+        $old = $this->getPath();
         $new = $this->getLocation().DIRECTORY_SEPARATOR.$name;
 
         if(!empty($this->getExtension())) {
@@ -375,7 +375,7 @@ class File
      */
     public function setExtension(string $extension)
     {
-        $old = $this->getLocation().DIRECTORY_SEPARATOR.$this->getBasename();
+        $old = $this->getPath();
         $new = $this->getLocation().DIRECTORY_SEPARATOR.$this->getName();
 
         if(!empty($extension)) {
@@ -452,7 +452,7 @@ class File
      */
     public function getPath() : string
     {
-        return $this->getLocation().DIRECTORY_SEPARATOR.$this->baseName();
+        return $this->getLocation().DIRECTORY_SEPARATOR.$this->getBasename();
     }
     /////////////////////////////
     // End Getters and Setters //
