@@ -1,6 +1,7 @@
 {
 	"name": "alexya-framework/filesystem",
 	"type": "framework",
+    "version": "3.0.1",
 	"description": "Alexya's FileSystem utilities",
 	"keywords": ["php", "framework", "filesystem", "file", "directory", "php7", "alexya"],
 	"license": "GNU",
@@ -15,8 +16,7 @@
         }
 	],
 	"require": {
-		"php": ">=7.0",
-        "psr/log": "^1.0"
+		"php": ">=7.0"
     },
 	"autoload": {
 		"psr-4": {
