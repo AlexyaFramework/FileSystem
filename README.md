@@ -121,11 +121,11 @@ Example:
 <?php
 
 // Static calls
-$name      = \Alexya\FileSystem\File::getName("/tmp/test.txt");      // $name      = "test"
-$extension = \Alexya\FileSystem\File::getExtension("/tmp/test.txt"); // $extension = "txt"
-$basename  = \Alexya\FileSystem\File::getBasename("/tmp/test.txt");  // $basename  = "test.txt"
-$path      = \Alexya\FileSystem\File::getPath("/tmp/test.txt");      // $path      = "/tmp/test.txt"
-$location  = \Alexya\FileSystem\File::getLocation("/tmp/test.txt");  // $location  = "/tmp"
+$name      = \Alexya\FileSystem\File::name("/tmp/test.txt");      // $name      = "test"
+$extension = \Alexya\FileSystem\File::extension("/tmp/test.txt"); // $extension = "txt"
+$basename  = \Alexya\FileSystem\File::basename("/tmp/test.txt");  // $basename  = "test.txt"
+$path      = \Alexya\FileSystem\File::path("/tmp/test.txt");      // $path      = "/tmp/test.txt"
+$location  = \Alexya\FileSystem\File::location("/tmp/test.txt");  // $location  = "/tmp"
 
 // Object calls
 $file = \Alexya\FileSystem\File::make("/tmp/test.txt", \Alexya\FileSystem\File::MAKE_FILE_EXISTS_OPEN);
@@ -358,9 +358,9 @@ Example:
 <?php
 
 // Static calls
-$name      = \Alexya\FileSystem\Directory::getName("/tmp/test");     // $name      = "test"
-$path      = \Alexya\FileSystem\Directory::getPath("/tmp/test");     // $path      = "/tmp/test"
-$location  = \Alexya\FileSystem\Directory::getLocation("/tmp/test"); // $location  = "/tmp"
+$name      = \Alexya\FileSystem\Directory::name("/tmp/test");     // $name      = "test"
+$path      = \Alexya\FileSystem\Directory::path("/tmp/test");     // $path      = "/tmp/test"
+$location  = \Alexya\FileSystem\Directory::location("/tmp/test"); // $location  = "/tmp"
 
 // Object calls
 $file = \Alexya\FileSystem\Directory::make("/tmp/test", \Alexya\FileSystem\Directory::MAKE_DIRECTORY_EXISTS_OPEN);

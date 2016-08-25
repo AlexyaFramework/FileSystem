@@ -16,7 +16,7 @@ namespace Alexya\FileSystem\Exceptions;
  *
  * @author Manulaiko <manulaiko@gmail.com>
  */
-class DirectoryAlreadyExists extends Exception
+class DirectoryAlreadyExists extends \Exception
 {
     /**
      * Constructor

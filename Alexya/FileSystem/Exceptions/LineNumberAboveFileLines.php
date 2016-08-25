@@ -31,7 +31,7 @@ namespace Alexya\FileSystem\Exceptions;
  *
  * @author Manulaiko <manulaiko@gmail.com>
  */
-class LineNumberAboveFileLines extends Exception
+class LineNumberAboveFileLines extends \Exception
 {
     /**
      * Constructor
