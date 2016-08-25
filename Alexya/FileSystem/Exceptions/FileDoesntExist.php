@@ -16,7 +16,7 @@ namespace Alexya\FileSystem\Exceptions;
  *
  * @author Manulaiko <manulaiko@gmail.com>
  */
-class FileDoesntExist extends Exception
+class FileDoesntExist extends \Exception
 {
     /**
      * Constructor

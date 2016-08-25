@@ -16,7 +16,7 @@ namespace Alexya\FileSystem\Exceptions;
  *
  * @author Manulaiko <manulaiko@gmail.com>
  */
-class FileAlreadyExists extends Exception
+class FileAlreadyExists extends \Exception
 {
     /**
      * Constructor

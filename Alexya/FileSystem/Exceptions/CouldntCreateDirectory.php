@@ -16,7 +16,7 @@ namespace Alexya\FileSystem\Exceptions;
  *
  * @author Manulaiko <manulaiko@gmail.com>
  */
-class CouldntCreateDirectory extends Exception
+class CouldntCreateDirectory extends \Exception
 {
     /**
      * Constructor
