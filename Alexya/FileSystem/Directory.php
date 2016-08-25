@@ -1,6 +1,10 @@
 <?php
 namespace Alexya\FileSystem;
-use Alexya\FileSystem\Exceptions\FileDoesntExist;
+
+use Alexya\FileSystem\Exceptions\{
+    FileDoesntExist,
+    DirectoryDoesntExist
+};
 
 /**
  * Directory helper class.
@@ -88,12 +92,14 @@ class Directory
     {
         $exists = Directory::exists($path);
 
-        if($ifExists == Directory::MAKE_DIRECTORY_EXISTS_OVERWRITE) {
-            unlink($path);
-        } else if($ifExsists == Directory::MAKE_DIRECTORY_EXISTS_OPEN) {
-            return new Directory($path);
-        } else {
-            throw new DirectoryAlreadyExists($path);
+        if($exists) {
+            if($ifExists == Directory::MAKE_DIRECTORY_EXISTS_OVERWRITE) {
+                unlink($path);
+            } else if($ifExists == Directory::MAKE_DIRECTORY_EXISTS_OPEN) {
+                return new Directory($path);
+            } else {
+                throw new DirectoryAlreadyExists($path);
+            }
         }
 
         if(!mkdir($path)) {
@@ -110,7 +116,7 @@ class Directory
      *
      * @return string Directory's name.
      */
-    public static function getName(string $path) : string
+    public static function name(string $path) : string
     {
         return (pathinfo($path)["basename"] ?? "");
     }
@@ -122,7 +128,7 @@ class Directory
      *
      * @return string Directory's location.
      */
-    public static function getLocation(string $path) : string
+    public static function location(string $path) : string
     {
         return (pathinfo($path)["dirname"] ?? "");
     }
@@ -186,8 +192,8 @@ class Directory
         }
 
         $this->_path     = $path;
-        $this->_location = Directory::getLocation($path);
-        $this->_name     = Directory::getName($path);
+        $this->_location = Directory::location($path);
+        $this->_name     = Directory::name($path);
     }
 
     /**
@@ -231,7 +237,9 @@ class Directory
         }
 
         if($ifNotExists == Directory::GET_FILE_NOT_EXISTS_CREATE) {
-            return File::make($path);
+            $this->_files[$name] = $name;
+
+            return File::make($path, File::MAKE_FILE_EXISTS_OPEN);
         }
 
         throw new FileDoesntExist($path);

@@ -1,6 +1,13 @@
 <?php
 namespace Alexya\FileSystem;
 
+use \Alexya\FileSystem\Exceptions\{
+    CouldntCreateFile,
+    FileDoesntExist,
+    FileAlreadyExists,
+    LineNumberAboveFileLines
+};
+
 /**
  * File helper class.
  *
@@ -73,12 +80,14 @@ class File
     {
         $exists = File::exists($path);
 
-        if($ifExists == File::MAKE_FILE_EXISTS_OVERWRITE) {
-            unlink($path);
-        } else if($ifExsists == File::MAKE_FILE_EXISTS_OPEN) {
-            return new File($path);
-        } else {
-            throw new FileAlreadyExists($path);
+        if($exists) {
+            if($ifExists == File::MAKE_FILE_EXISTS_OVERWRITE) {
+                unlink($path);
+            } else if($ifExists == File::MAKE_FILE_EXISTS_OPEN) {
+                return new File($path);
+            } else {
+                throw new FileAlreadyExists($path);
+            }
         }
 
         if(!fopen($path, "c")) {
@@ -95,7 +104,7 @@ class File
      *
      * @return string File's extension.
      */
-    public static function getExtension(string $path) : string
+    public static function extension(string $path) : string
     {
         return (pathinfo($path)["extension"] ?? "");
     }
@@ -107,7 +116,7 @@ class File
      *
      * @return string File's name.
      */
-    public static function getName(string $path) : string
+    public static function name(string $path) : string
     {
         return (pathinfo($path)["filename"] ?? "");
     }
@@ -119,7 +128,7 @@ class File
      *
      * @return string File's base name.
      */
-    public static function getBasename(string $path) : string
+    public static function basename(string $path) : string
     {
         return (pathinfo($path)["basename"] ?? "");
     }
@@ -131,7 +140,7 @@ class File
      *
      * @return string File's location.
      */
-    public static function getLocation(string $path) : string
+    public static function location(string $path) : string
     {
         return (pathinfo($path)["dirname"] ?? "");
     }
@@ -188,9 +197,9 @@ class File
         }
 
         $this->_path      = $path;
-        $this->_location  = File::getLocation($path);
-        $this->_name      = File::getName($path);
-        $this->_extension = File::getExtension($path);
+        $this->_location  = File::location($path);
+        $this->_name      = File::name($path);
+        $this->_extension = File::extension($path);
     }
 
     /**
