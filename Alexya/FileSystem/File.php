@@ -452,6 +452,8 @@ class File
         if(!empty($this->getExtension())) {
             $basename .= ".".$this->getExtension();
         }
+
+        return $basename;
     }
 
     /**
