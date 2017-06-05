@@ -2,26 +2,28 @@
 namespace Alexya\FileSystem\Exceptions;
 
 /**
- * irectory already exists exception
+ * Directory already exists exception.
  *
- * This exception is thrown when you try to create a directory that already exists
+ * This exception is thrown when you try to create a directory that already exists.
  *
  * Example:
  *
- *     try {
- *     	   $directory = irectory::make("/test");
- *     } catch(DirectoryAlreadyExists $e) {
- *         echo "irectory '/test' already exists!";
- *     }
+ * ```php
+ * try {
+ *     $directory = Directory::make("/test");
+ * } catch(DirectoryAlreadyExists $e) {
+ *     echo "Directory '/test' already exists!";
+ * }
+ * ```
  *
  * @author Manulaiko <manulaiko@gmail.com>
  */
 class DirectoryAlreadyExists extends \Exception
 {
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param string $path Path to directory
+     * @param string $path Path to directory.
      */
     public function __construct(string $path)
     {

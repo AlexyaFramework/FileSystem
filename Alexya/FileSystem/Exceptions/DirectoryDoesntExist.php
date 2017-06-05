@@ -2,26 +2,28 @@
 namespace Alexya\FileSystem\Exceptions;
 
 /**
- * Directory doesn't exist exception
+ * Directory doesn't exist exception.
  *
- * This exception is thrown when you try to read/write from a directory that doesn't exist
+ * This exception is thrown when you try to read/write from a directory that doesn't exist.
  *
  * Example:
  *
- *     try {
- *     	   $directory = new Directory("/test");
- *     } catch(DirectoryDoesntExist $e) {
- *         echo "Directory '/test' doesn't exist!";
- *     }
+ * ```php
+ * try {
+ *     $directory = new Directory("/test");
+ * } catch(DirectoryDoesntExist $e) {
+ *     echo "Directory '/test' doesn't exist!";
+ * }
+ * ```
  *
  * @author Manulaiko <manulaiko@gmail.com>
  */
 class DirectoryDoesntExist extends \Exception
 {
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param string $path Path to directory
+     * @param string $path Path to directory.
      */
     public function __construct(string $path)
     {

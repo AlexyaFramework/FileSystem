@@ -2,6 +2,9 @@
 namespace Alexya\FileSystem;
 
 use Alexya\FileSystem\Exceptions\{
+    CouldntCreateDirectory,
+    CouldntCreateFile,
+    DirectoryAlreadyExists,
     FileDoesntExist,
     DirectoryDoesntExist
 };
@@ -20,21 +23,23 @@ use Alexya\FileSystem\Exceptions\{
  *
  * Example:
  *
- *     if(Directory::exists("/tmp")) {
- *         $dir = new Directory("/tmp");
- *     } else {
- *         $dir = Directory::make("/tmp");
- *     }
+ * ```php
+ * if(Directory::exists("/tmp")) {
+ *     $dir = new Directory("/tmp");
+ * } else {
+ *     $dir = Directory::make("/tmp");
+ * }
  *
- *     echo "Sub-directories of ". $dir->getPath() ."\n";
- *     foreach($dir->getDirectories() as $subdir) {
- *         echo $subdir->getPath() ."\n";
- *     }
+ * echo "Sub-directories of ". $dir->getPath() ."\n";
+ * foreach($dir->getDirectories() as $subdir) {
+ *     echo $subdir->getPath() ."\n";
+ * }
  *
- *     echo "Files of ". $dir->getPath() ."\n";
- *     foreach($dir->getFiles() as $file) {
- *         echo $file->getPath() ."\n";
- *     }
+ * echo "Files of ". $dir->getPath() ."\n";
+ * foreach($dir->getFiles() as $file) {
+ *     echo $file->getPath() ."\n";
+ * }
+ * ```
  *
  * @author Manulaiko <manulaiko@gmail.com>
  */
@@ -60,11 +65,11 @@ class Directory
     // Start Static Methods and Properties //
     /////////////////////////////////////////
     /**
-     * Checks wether a directory exists in the filesystem.
+     * Checks whether a directory exists in the filesystem.
      *
      * @param string $path Path to the directory.
      *
-     * @return bool Wether $path exists and is a directory.
+     * @return bool Whether $path exists and is a directory.
      */
     public static function exists(string $path) : bool
     {
@@ -83,19 +88,19 @@ class Directory
      * @param string $path     Path to the directory.
      * @param int    $ifExists What to do if directory exists.
      *
-     * @return \Alexya\FileSystem\Directory Directory object.
+     * @return Directory Directory object.
      *
-     * @throws \Alexya\FileSystem\Exceptions\DirectoryAlreadyExists If $path already exists as a directory.
-     * @throws \Alexya\FileSystem\Exceptions\CouldntCreateDirectory If the directory can't be created.
+     * @throws DirectoryAlreadyExists If $path already exists as a directory.
+     * @throws CouldntCreateDirectory If the directory can't be created.
      */
-    public static function make(string $path, int $ifExists = File::MAKE_DIRECTORY_EXISTS_THROW_EXCEPTION) : Directory
+    public static function make(string $path, int $ifExists = Directory::MAKE_DIRECTORY_EXISTS_THROW_EXCEPTION) : Directory
     {
         $exists = Directory::exists($path);
 
         if($exists) {
-            if($ifExists == Directory::MAKE_DIRECTORY_EXISTS_OVERWRITE) {
+            if($ifExists === Directory::MAKE_DIRECTORY_EXISTS_OVERWRITE) {
                 unlink($path);
-            } else if($ifExists == Directory::MAKE_DIRECTORY_EXISTS_OPEN) {
+            } else if($ifExists === Directory::MAKE_DIRECTORY_EXISTS_OPEN) {
                 return new Directory($path);
             } else {
                 throw new DirectoryAlreadyExists($path);
@@ -158,7 +163,7 @@ class Directory
     private $_location = "";
 
     /**
-     * Whether files and sub-directories have been loaded
+     * Whether files and sub-directories have been loaded.
      *
      * @var bool
      */
@@ -167,14 +172,14 @@ class Directory
     /**
      * Array containing directories.
      *
-     * @var array
+     * @var Directory[]
      */
     private $_directories = [];
 
     /**
      * Array containing files.
      *
-     * @var array
+     * @var File[]
      */
     private $_files = [];
 
@@ -183,7 +188,7 @@ class Directory
      *
      * @param string $path Path to the Directory.
      *
-     * @throws \Alexya\FileSystem\Exceptions\DirectoryDoesntExist If `$path` doesn't exist.
+     * @throws DirectoryDoesntExist If `$path` doesn't exist.
      */
     public function __construct(string $path)
     {
@@ -201,7 +206,7 @@ class Directory
      *
      * @param string $name File name.
      *
-     * @return boolean `true` if `$name` exists as a file in this directory, `false` if not.
+     * @return bool `true` if `$name` exists as a file in this directory, `false` if not.
      */
     public function fileExists(string $name)
     {
@@ -223,10 +228,10 @@ class Directory
      * @param string $name         File name.
      * @param int    $ifNotExists What to do if file exists.
      *
-     * @return \Alexya\FileSystem\File File object.
+     * @return File File object.
      *
-     * @throws \Alexya\FileSystem\Exceptions\FileDoesntExist   If $path doesn't exist as a file.
-     * @throws \Alexya\FileSystem\Exceptions\CouldntCreateFile If the file can't be created.
+     * @throws FileDoesntExist   If $path doesn't exist as a file.
+     * @throws CouldntCreateFile If the file can't be created.
      */
     public function getFile(string $name, int $ifNotExists = Directory::GET_FILE_NOT_EXISTS_THROW_EXCEPTION) : File
     {
@@ -236,7 +241,7 @@ class Directory
             return new File($path);
         }
 
-        if($ifNotExists == Directory::GET_FILE_NOT_EXISTS_CREATE) {
+        if($ifNotExists === Directory::GET_FILE_NOT_EXISTS_CREATE) {
             $this->_files[$name] = $name;
 
             return File::make($path, File::MAKE_FILE_EXISTS_OPEN);
@@ -248,7 +253,7 @@ class Directory
     /**
      * Returns an array with all files of the directory.
      *
-     * @return array Array with `\Alexya\FileSystem\File` objects for each file on the directory.
+     * @return File[] Array with `\Alexya\FileSystem\File` objects for each file on the directory.
      */
     public function getFiles() : array
     {
@@ -266,7 +271,7 @@ class Directory
      *
      * @param string $name Directory name.
      *
-     * @return boolean `true` if `$name` exists as a directory in this directory, `false` if not.
+     * @return bool `true` if `$name` exists as a directory in this directory, `false` if not.
      */
     public function directoryExists(string $name)
     {
@@ -288,10 +293,10 @@ class Directory
      * @param string $name         Directory name.
      * @param int    $ifNotExists What to do if directory exists.
      *
-     * @return \Alexya\FileSystem\Directory Directory object.
+     * @return Directory Directory object.
      *
-     * @throws \Alexya\FileSystem\Exceptions\DirectoryDoesntExist   If $path doesn't exist as a directory.
-     * @throws \Alexya\FileSystem\Exceptions\CouldntCreateDirectory If the directory can't be created.
+     * @throws DirectoryDoesntExist   If $path doesn't exist as a directory.
+     * @throws CouldntCreateDirectory If the directory can't be created.
      */
     public function getDirectory(string $name, int $ifNotExists = Directory::GET_DIRECTORY_NOT_EXISTS_THROW_EXCEPTION) : Directory
     {
@@ -301,7 +306,7 @@ class Directory
             return new Directory($path);
         }
 
-        if($ifNotExists == Directory::GET_DIRECTORY_NOT_EXISTS_CREATE) {
+        if($ifNotExists === Directory::GET_DIRECTORY_NOT_EXISTS_CREATE) {
             return Directory::make($path);
         }
 
@@ -311,7 +316,7 @@ class Directory
     /**
      * Returns an array with all directories of the directory.
      *
-     * @return array Array with `\Alexya\FileSystem\Directory` objects for each directory on the directory.
+     * @return Directory[] Array with `\Alexya\FileSystem\Directory` objects for each directory on the directory.
      */
     public function getDirectories() : array
     {
@@ -333,8 +338,8 @@ class Directory
 
         foreach($files as $file) {
             if(
-                $file == "." ||
-                $file == ".."
+                $file === "." ||
+                $file === ".."
             ) {
                 continue;
             }
@@ -342,7 +347,7 @@ class Directory
             if(is_file($this->getPath().$file)) {
                 $this->_files[$file] = $file;
             } else if(is_dir($this->getPath().$file)) {
-                $this->_subdirs[$file] = $file;
+                $this->_directories[$file] = $file;
             }
         }
     }
@@ -368,7 +373,7 @@ class Directory
     }
 
     /**
-     * Renames the file
+     * Renames the file.
      *
      * @param string $name New file name.
      */

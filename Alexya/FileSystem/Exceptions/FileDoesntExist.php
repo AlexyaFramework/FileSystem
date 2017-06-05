@@ -2,26 +2,28 @@
 namespace Alexya\FileSystem\Exceptions;
 
 /**
- * File doesn't exist exception
+ * File doesn't exist exception.
  *
- * This exception is thrown when you try to read/write to a file that doesn't exist
+ * This exception is thrown when you try to read/write to a file that doesn't exist.
  *
  * Example:
  *
- *     try {
- *     	   $file = new File("test.txt");
- *     } catch(FileDoesntExist $e) {
- *         echo "File 'test.txt' doesn't exist!";
- *     }
+ * ```php
+ * try {
+ *     $file = new File("test.txt");
+ * } catch(FileDoesntExist $e) {
+ *     echo "File 'test.txt' doesn't exist!";
+ * }
+ * ```
  *
  * @author Manulaiko <manulaiko@gmail.com>
  */
 class FileDoesntExist extends \Exception
 {
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param string $path Path to file
+     * @param string $path Path to file.
      */
     public function __construct(string $path)
     {
