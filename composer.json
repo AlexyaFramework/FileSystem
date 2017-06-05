@@ -1,7 +1,7 @@
 {
     "name": "alexya-framework/filesystem",
     "type": "framework",
-    "version": "3.0.3",
+    "version": "3.0.4",
     "description": "Alexya's FileSystem utilities",
     "keywords": ["php", "framework", "filesystem", "file", "directory", "php7", "alexya"],
     "license": "GNU",
