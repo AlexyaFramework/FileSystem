@@ -21,14 +21,16 @@ use \Alexya\FileSystem\Exceptions\{
  *
  * Example:
  *
- *     if(File::exists("/tmp/test.txt")) {
- *         $file = new File("/tmp/test.txt");
- *     } else {
- *         $file = File::make("/tmp/test.txt");
- *     }
+ * ```php
+ * if(File::exists("/tmp/test.txt")) {
+ *     $file = new File("/tmp/test.txt");
+ * } else {
+ *     $file = File::make("/tmp/test.txt");
+ * }
  *
- *     $file->write("Hello ");
- *     $file->append("world!")
+ * $file->write("Hello ");
+ * $file->append("world!")
+ * ```
  *
  * @author Manulaiko <manulaiko@gmail.com>
  */
@@ -48,11 +50,11 @@ class File
     // Start Static Methods and Properties //
     /////////////////////////////////////////
     /**
-     * Checks wether a file exists in the filesystem.
+     * Checks whether a file exists in the filesystem.
      *
      * @param string $path Path to the file.
      *
-     * @return bool Wether $path exists and is a file.
+     * @return bool Whether $path exists and is a file.
      */
     public static function exists(string $path) : bool
     {
@@ -71,19 +73,19 @@ class File
      * @param string $path     Path to the file.
      * @param int    $ifExists What to do if file exists.
      *
-     * @return \Alexya\FileSystem\File File object.
+     * @return File File object.
      *
-     * @throws \Alexya\FileSystem\Exceptions\FileAlreadyExists If $path already exists as a file.
-     * @throws \Alexya\FileSystem\Exceptions\CouldntCreateFile If the file can't be created.
+     * @throws FileAlreadyExists If $path already exists as a file.
+     * @throws CouldntCreateFile If the file can't be created.
      */
     public static function make(string $path, int $ifExists = File::MAKE_FILE_EXISTS_THROW_EXCEPTION) : File
     {
         $exists = File::exists($path);
 
         if($exists) {
-            if($ifExists == File::MAKE_FILE_EXISTS_OVERWRITE) {
+            if($ifExists === File::MAKE_FILE_EXISTS_OVERWRITE) {
                 unlink($path);
-            } else if($ifExists == File::MAKE_FILE_EXISTS_OPEN) {
+            } else if($ifExists === File::MAKE_FILE_EXISTS_OPEN) {
                 return new File($path);
             } else {
                 throw new FileAlreadyExists($path);
@@ -156,13 +158,6 @@ class File
     private $_path = "";
 
     /**
-     * File handler resource.
-     *
-     * @var resource
-     */
-    private $_handler = null;
-
-    /**
      * File name.
      *
      * @var string
@@ -188,7 +183,7 @@ class File
      *
      * @param string $path Path to the file.
      *
-     * @throws \Alexya\FileSystem\Exceptions\FileDoesntExist If $path doesn't exist.
+     * @throws FileDoesntExist If $path doesn't exist.
      */
     public function __construct(string $path)
     {
@@ -203,7 +198,7 @@ class File
     }
 
     /**
-     * Checks wether the file has write permission or not.
+     * Checks whether the file has write permission or not.
      *
      * @return bool True if fie is writable, false if not.
      */
@@ -213,7 +208,7 @@ class File
     }
 
     /**
-     * Checks wether the file has read permission or not.
+     * Checks whether the file has read permission or not.
      *
      * @return bool True if fie is readable, false if not.
      */
@@ -223,7 +218,7 @@ class File
     }
 
     /**
-     * Checks wether the file has execution permission or not.
+     * Checks whether the file has execution permission or not.
      *
      * @return bool True if fie is executable, false if not.
      */
@@ -299,7 +294,7 @@ class File
      *
      * @return string Line as string.
      *
-     * @throws \Alexya\FileSystem\Exceptions\LineNumberAboveFileLines If the line number is bigger than the total number of lines
+     * @throws LineNumberAboveFileLines If the line number is bigger than the total number of lines
      */
     public function readLine(int $line = 1) : string
     {

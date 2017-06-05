@@ -8,20 +8,22 @@ namespace Alexya\FileSystem\Exceptions;
  *
  * Example:
  *
- *     try {
- *     	   $file = File::make("test.txt");
- *     } catch(CouldntCreateFile $e) {
- *         echo "Couldn't create file 'test.txt'";
- *     }
+ * ```php
+ * try {
+ *     $file = File::make("test.txt");
+ * } catch(CouldntCreateFile $e) {
+ *     echo "Couldn't create file 'test.txt'";
+ * }
+ * ```
  *
  * @author Manulaiko <manulaiko@gmail.com>
  */
 class CouldntCreateFile extends \Exception
 {
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param string $path Path to file
+     * @param string $path Path to file.
      */
     public function __construct(string $path)
     {

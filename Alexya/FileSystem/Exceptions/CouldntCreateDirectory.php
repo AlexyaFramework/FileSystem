@@ -8,20 +8,22 @@ namespace Alexya\FileSystem\Exceptions;
  *
  * Example:
  *
- *     try {
- *     	   $dir = Directory::make("/test");
- *     } catch(CouldntCreateDirectory $e) {
- *         echo "Couldn't create directory '/test'";
- *     }
+ * ```php
+ * try {
+ *     $dir = Directory::make("/test");
+ * } catch(CouldntCreateDirectory $e) {
+ *     echo "Couldn't create directory '/test'";
+ * }
+ * ```
  *
  * @author Manulaiko <manulaiko@gmail.com>
  */
 class CouldntCreateDirectory extends \Exception
 {
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param string $path Path to directory
+     * @param string $path Path to directory.
      */
     public function __construct(string $path)
     {
