@@ -3,6 +3,7 @@ namespace Alexya\FileSystem\Exceptions;
 
 /**
  * Line number above file lines exception.
+ * =======================================
  *
  * This exception is thrown when you try to read more lines than
  * the file has.

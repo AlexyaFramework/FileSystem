@@ -3,6 +3,7 @@ namespace Alexya\FileSystem\Exceptions;
 
 /**
  * Directory doesn't exist exception.
+ * ==================================
  *
  * This exception is thrown when you try to read/write from a directory that doesn't exist.
  *

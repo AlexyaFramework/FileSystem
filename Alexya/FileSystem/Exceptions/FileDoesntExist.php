@@ -3,6 +3,7 @@ namespace Alexya\FileSystem\Exceptions;
 
 /**
  * File doesn't exist exception.
+ * =============================
  *
  * This exception is thrown when you try to read/write to a file that doesn't exist.
  *

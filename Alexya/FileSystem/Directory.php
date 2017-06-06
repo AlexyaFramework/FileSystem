@@ -10,7 +10,8 @@ use Alexya\FileSystem\Exceptions\{
 };
 
 /**
- * Directory helper class.
+ * Directory class.
+ * ================
  *
  * This class offers helpers for directory related operations.
  *
@@ -208,7 +209,7 @@ class Directory
      *
      * @return bool `true` if `$name` exists as a file in this directory, `false` if not.
      */
-    public function fileExists(string $name)
+    public function fileExists(string $name) : bool
     {
         if(!$this->_isLoaded) {
             $this->load();
@@ -273,7 +274,7 @@ class Directory
      *
      * @return bool `true` if `$name` exists as a directory in this directory, `false` if not.
      */
-    public function directoryExists(string $name)
+    public function directoryExists(string $name) : bool
     {
         if(!$this->_isLoaded) {
             $this->load();
@@ -332,7 +333,7 @@ class Directory
     /**
      * Loads directories and files.
      */
-    public function load()
+    public function load() : void
     {
         $files = scandir($this->getPath());
 
@@ -360,7 +361,7 @@ class Directory
      *
      * @param string $location New file location.
      */
-    public function setLocation(string $location)
+    public function setLocation(string $location) : void
     {
         $dir = Directory::make($location, Directory::MAKE_DIRECTORY_EXISTS_OPEN);
 
@@ -377,7 +378,7 @@ class Directory
      *
      * @param string $name New file name.
      */
-    public function setName(string $name)
+    public function setName(string $name) : void
     {
         $old = $this->getPath();
         $new = $this->getLocation().DIRECTORY_SEPARATOR.$name;
@@ -392,7 +393,7 @@ class Directory
      *
      * @param string $path New path to file (location + name + extension).
      */
-    public function setPath(string $path)
+    public function setPath(string $path) : void
     {
         $info = pathinfo($path);
 

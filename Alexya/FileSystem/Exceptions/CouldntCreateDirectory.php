@@ -2,7 +2,8 @@
 namespace Alexya\FileSystem\Exceptions;
 
 /**
- * Couldn't create exception.
+ * Couldn't create directory exception.
+ * ====================================
  *
  * This exception is thrown when you try to create a directory and an error happened.
  *

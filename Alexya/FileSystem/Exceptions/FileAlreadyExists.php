@@ -3,6 +3,7 @@ namespace Alexya\FileSystem\Exceptions;
 
 /**
  * File already exists exception.
+ * ==============================
  *
  * This exception is thrown when you try to create a file that already exists.
  *

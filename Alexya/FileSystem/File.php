@@ -9,7 +9,8 @@ use \Alexya\FileSystem\Exceptions\{
 };
 
 /**
- * File helper class.
+ * File class.
+ * ===========
  *
  * This class offers helpers for file related operations.
  *
@@ -232,7 +233,7 @@ class File
      *
      * @param string $str String to write.
      */
-    public function write(string $str)
+    public function write(string $str) : void
     {
         $handler = fopen($this->_path, "w");
         fwrite($handler, $str);
@@ -244,7 +245,7 @@ class File
      *
      * @param string $str String to append.
      */
-    public function append(string $str)
+    public function append(string $str) : void
     {
         $handler = fopen($this->_path, "a");
         fwrite($handler, $str);
@@ -341,7 +342,7 @@ class File
      *
      * @param string $location New file location.
      */
-    public function setLocation(string $location)
+    public function setLocation(string $location) : void
     {
         $dir = Directory::make($location, Directory::MAKE_DIRECTORY_EXISTS_OPEN);
 
@@ -358,7 +359,7 @@ class File
      *
      * @param string $name New file name.
      */
-    public function setName(string $name)
+    public function setName(string $name) : void
     {
         $old = $this->getPath();
         $new = $this->getLocation().DIRECTORY_SEPARATOR.$name;
@@ -377,7 +378,7 @@ class File
      *
      * @param string $extension New file extension.
      */
-    public function setExtension(string $extension)
+    public function setExtension(string $extension) : void
     {
         $old = $this->getPath();
         $new = $this->getLocation().DIRECTORY_SEPARATOR.$this->getName();
@@ -396,7 +397,7 @@ class File
      *
      * @param string $path New path to file (location + name + extension).
      */
-    public function setPath(string $path)
+    public function setPath(string $path) : void
     {
         $info = pathinfo($path);
 
@@ -436,7 +437,7 @@ class File
     }
 
     /**
-     * Returns file's base name (name + extension)
+     * Returns file's base name (name + extension).
      *
      * @return string File's basename
      */

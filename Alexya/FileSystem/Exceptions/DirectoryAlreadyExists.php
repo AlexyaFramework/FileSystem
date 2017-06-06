@@ -3,6 +3,7 @@ namespace Alexya\FileSystem\Exceptions;
 
 /**
  * Directory already exists exception.
+ * ===================================
  *
  * This exception is thrown when you try to create a directory that already exists.
  *
